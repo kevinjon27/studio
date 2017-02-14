@@ -46,6 +46,8 @@ return [
         'nexmo_key' => env('NEXMO_KEY'),
         'nexmo_secret' => env('NEXMO_SECRET'),
         'slack_token' => env('SLACK_TOKEN'),
+        'slack_client_id' => env('SLACK_CLIENT_ID'),
+        'slack_client_secret' => env('SLACK_CLIENT_SECRET'),
         'telegram_token' => env('TELEGRAM_TOKEN'),
         'facebook_token' => env('FACEBOOK_TOKEN')
     ],

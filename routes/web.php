@@ -12,3 +12,5 @@
 */
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
+Route::get('/login/slack', 'BotManLoginController@loginWithSlack');
+Route::get('/redirect/slack', 'BotManLoginController@redirectFromSlack')->name('botman.redirect_slack');
