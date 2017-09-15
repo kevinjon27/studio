@@ -5,8 +5,9 @@
 
     namespace App\Libraries\LineDriver;
 
-    use App\Libraries\LineDriver\Extensions\User;
+    use App\Libraries\LineDriver\Exceptions\LineException;
     use BotMan\BotMan\Messages\Incoming\Answer;
+    use BotMan\BotMan\Users\User;
     use Illuminate\Support\Facades\Log;
     use LINE\LINEBot\Event\BeaconDetectionEvent;
     use LINE\LINEBot\Event\FollowEvent;
@@ -52,8 +53,6 @@
 
         protected $matchesRequest = false;
 
-        protected $log;
-
         /**
          * @param Request $request
          */
@@ -65,17 +64,16 @@
             $this->line = new LINEBot(new CurlHTTPClient($this->config->get('channel_access_token')),[
                 'channelSecret' => $this->config->get('channel_secret')
             ]);
-            $this->log = new Log();
 
             try {
                 $this->event = Collection::make($this->line->parseEventRequest($request->getContent(), $this->signature));
                 $this->matchesRequest = true;
             } catch (InvalidSignatureException $e) {
                 $this->matchesRequest = false;
-                $this->log->error('Invalid signature: ', $e->getMessage());
+                throw new LineException('Invalid signature: '. $e->getMessage(), 0, $e);
             } catch (InvalidEventRequestException $e) {
                 $this->matchesRequest = false;
-                $this->log->error('Invalid event request:', $e->getMessage());
+                throw new LineException('Invalid event request: '. $e->getMessage(), 0, $e);
             }
 
         }
@@ -108,18 +106,15 @@
                         } elseif ($event instanceof VideoMessage) {
 
                         } elseif ($event instanceof UnknownMessage) {
-                            $this->log->info(sprintf(
-                                              'Unknown message type has come [message type: %s]',
-                                              $event->getMessageType()
-                                          ));
+                            throw new LineException(sprintf(
+                                                        'Unknown message type has come [message type: %s]',
+                                                        $event->getMessageType()
+                                                    ));
                         } else {
-                            // Unexpected behavior (just in case)
-                            // something wrong if reach here
-                            $this->log->info(sprintf(
-                                              'Unexpected message type has come, something wrong [class name: %s]',
-                                              get_class($event)
-                                          ));
-                            continue;
+                            throw new LineException(sprintf(
+                                                        'Unexpected message type has come, something wrong [class name: %s]',
+                                                        get_class($event)
+                                                    ));
                         }
                     } elseif ($event instanceof UnfollowEvent) {
 
@@ -134,15 +129,12 @@
                     } elseif ($event instanceof BeaconDetectionEvent) {
 
                     } elseif ($event instanceof UnknownEvent) {
-                        $this->log->info(sprintf('Unknown message type has come [type: %s]', $event->getType()));
+                        throw new LineException(sprintf('Unknown message type has come [type: %s]', $event->getType()));
                     } else {
-                        // Unexpected behavior (just in case)
-                        // something wrong if reach here
-                        $this->log->info(sprintf(
-                                          'Unexpected event type has come, something wrong [class name: %s]',
-                                          get_class($event)
-                                      ));
-                        continue;
+                        throw new LineException(sprintf(
+                                                    'Unexpected event type has come, something wrong [class name: %s]',
+                                                    get_class($event)
+                                                ));
                     }
                 }
             }
@@ -157,13 +149,15 @@
         public function getUser(IncomingMessage $matchingMessage)
         {
             $user =  $this->line->getProfile($matchingMessage->getSender());
-            $profile = Collection::make($user->getJSONDecodedBody());
 
-            $this->log->info('User profile: ',$user->getJSONDecodedBody());
+            if (!$user->isSucceeded()) {
+                throw new LineException('Error retrieving user info');
+            }
+
+            $profile = Collection::make($user->getJSONDecodedBody());
 
             $user_id = $profile->get('userId') ? $profile->get('userId') : null;
             $display_name = $profile->get('displayName') ? $profile->get('displayName') : null;
-
             $profile = [
                 'picture_url' => $profile->get('pictureUrl') ? $profile->get('pictureUrl') : null,
                 'status_message' => $profile->get('statusMessage') ? $profile->get('statusMessage') :null
