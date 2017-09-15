@@ -5,7 +5,7 @@ namespace App\Libraries\LineDriver\EventHandler;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\UnfollowEvent;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 
 class UnfollowEventHandler implements EventHandler
 {

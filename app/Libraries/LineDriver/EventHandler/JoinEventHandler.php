@@ -5,7 +5,7 @@ namespace App\Libraries\LineDriver\EventHandler;
 use App\Libraries\LineDriver\Exceptions\LineException;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\JoinEvent;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 
 class JoinEventHandler implements EventHandler
 {

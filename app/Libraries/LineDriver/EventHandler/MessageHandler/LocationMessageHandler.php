@@ -4,7 +4,7 @@ namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
 
 class LocationMessageHandler implements EventHandler

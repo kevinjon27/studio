@@ -4,7 +4,7 @@ namespace App\Libraries\LineDriver\EventHandler;
 
 use LINE\LINEBot;
 use LINE\LINEBot\Event\BeaconDetectionEvent;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 
 class BeaconEventHandler implements EventHandler
 {

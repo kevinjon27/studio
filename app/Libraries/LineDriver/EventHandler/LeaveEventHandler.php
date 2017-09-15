@@ -6,7 +6,7 @@ use App\Libraries\LineDriver\Exceptions\LineException;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\LeaveEvent;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 
 class LeaveEventHandler implements EventHandler
 {

@@ -4,7 +4,7 @@ namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\AudioMessage;
-use LINE\LINEBot\KitchenSink\EventHandler;
+use App\Libraries\LineDriver\EventHandler;
 use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use Symfony\Component\HttpFoundation\Request;
