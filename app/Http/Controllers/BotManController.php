@@ -18,7 +18,7 @@ class BotManController extends Controller
     public function handle(Request $request)
     {
         Log::info('header', $request->headers->all());
-        Log::info('result'. $request->all());
+        Log::info('result', $request->all());
 
         DriverManager::loadDriver(LineDriver::class);
 
