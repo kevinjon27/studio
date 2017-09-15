@@ -8,6 +8,7 @@ use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use Illuminate\Http\Request;
 use App\Conversations\ExampleConversation;
+use Illuminate\Support\Facades\Log;
 
 class BotManController extends Controller
 {
@@ -18,7 +19,7 @@ class BotManController extends Controller
     {
         Log::info('header', $request->headers->all());
         Log::info('result'. $request->all());
-        
+
         DriverManager::loadDriver(LineDriver::class);
 
         $config = config('botman');
