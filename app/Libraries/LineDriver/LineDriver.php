@@ -5,6 +5,10 @@
 
     namespace App\Libraries\LineDriver;
 
+use BotMan\BotMan\Messages\Incoming\Answer;
+use LINE\LINEBot\Exception\InvalidEventRequestException;
+use LINE\LINEBot\Exception\InvalidSignatureException;
+
     use BotMan\BotMan\Drivers\HttpDriver;
     use BotMan\BotMan\Interfaces\DriverInterface;
     use BotMan\BotMan\Interfaces\UserInterface;
@@ -24,6 +28,13 @@
         /** @var string */
         protected $signature;
 
+        /** @var LINEBot */
+        protected $line;
+
+        protected $messages = [];
+
+        protected $matchesRequest = false;
+
         /**
          * @param Request $request
          */
@@ -32,15 +43,19 @@
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->signature = $request->headers->get(HTTPHeader::LINE_SIGNATURE);
             $this->config = Collection::make($this->config->get('line'));
-            $line = new LINEBot(new CurlHTTPClient($this->config->get('channel_access_token')),[
+            $this->line = new LINEBot(new CurlHTTPClient($this->config->get('channel_access_token')),[
                 'channelSecret' => $this->config->get('channel_secret')
             ]);
 
-            /*
-             * Uncomment this if you do on server. I comment the code because I do on my local.
-             * */
-            //$this->event = Collection::make($line->parseEventRequest($request->getContent(), $this->signature));
-            $this->event = Collection::make($this->payload->get('events'));
+            try {
+                $this->event = Collection::make($this->line->parseEventRequest($request->getContent(), $this->signature));
+                $this->matchesRequest = true;
+            } catch (InvalidSignatureException $e) {
+                $this->matchesRequest = false;
+            } catch (InvalidEventRequestException $e) {
+                $this->matchesRequest = false;
+            }
+
         }
 
         /**
@@ -48,20 +63,24 @@
          *
          * @return bool
          */
-
         public function matchesRequest()
         {
-            // TODO: Implement matchesRequest() method.
+            return $this->matchesRequest;
         }
 
         public function getMessages()
         {
-            // TODO: Implement getMessages() method.
+            if (empty($this->messages)) {
+                foreach ($this->event as $event) {
+                    $this->messages[] = new IncomingMessage($event->getText(), $event->getUserId(), $event->getReplyToken());
+                }
+            }
+            return $this->messages;
         }
 
         public function isConfigured()
         {
-            // TODO: Implement isConfigured() method.
+            return true;
         }
 
         public function getUser(IncomingMessage $matchingMessage)
@@ -71,17 +90,20 @@
 
         public function getConversationAnswer(IncomingMessage $message)
         {
-            // TODO: Implement getConversationAnswer() method.
+            return Answer::create($message->getText())->setMessage($message);
         }
 
         public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
         {
-            // TODO: Implement buildServicePayload() method.
+            return [
+                'replyToken' => $matchingMessage->getSender(),
+                'message' => $message->getText()
+            ];
         }
 
         public function sendPayload($payload)
         {
-            // TODO: Implement sendPayload() method.
+            return $this->line->replyText($payload['replyToken'], $payload['message']);
         }
 
         public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
@@ -90,4 +112,3 @@
         }
 
     }
-
