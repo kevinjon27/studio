@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\LineDriver\LineDriver;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
 use Illuminate\Http\Request;
 use App\Conversations\ExampleConversation;
 
@@ -13,7 +16,17 @@ class BotManController extends Controller
      */
     public function handle()
     {
-        $botman = app('botman');
+        DriverManager::loadDriver(LineDriver::class);
+
+        $config = config('botman');
+        // create an instance
+        $botman = BotManFactory::create($config);
+
+        dd($botman);
+
+        $botman->hears('Hi', function ($bot) {
+            $bot->reply('Hello!');
+        });
 
         $botman->listen();
     }
