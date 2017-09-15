@@ -5,10 +5,18 @@
 
     namespace App\Libraries\LineDriver;
 
+    use App\Libraries\LineDriver\EventHandler\BeaconEventHandler;
+    use App\Libraries\LineDriver\EventHandler\FollowEventHandler;
+    use App\Libraries\LineDriver\EventHandler\JoinEventHandler;
+    use App\Libraries\LineDriver\EventHandler\LeaveEventHandler;
+    use App\Libraries\LineDriver\EventHandler\MessageHandler\ImageMessageHandler;
+    use App\Libraries\LineDriver\EventHandler\MessageHandler\LocationMessageHandler;
+    use App\Libraries\LineDriver\EventHandler\MessageHandler\StickerMessageHandler;
+    use App\Libraries\LineDriver\EventHandler\PostbackEventHandler;
+    use App\Libraries\LineDriver\EventHandler\UnfollowEventHandler;
     use App\Libraries\LineDriver\Exceptions\LineException;
     use BotMan\BotMan\Messages\Incoming\Answer;
     use BotMan\BotMan\Users\User;
-    use Illuminate\Support\Facades\Log;
     use LINE\LINEBot\Event\BeaconDetectionEvent;
     use LINE\LINEBot\Event\FollowEvent;
     use LINE\LINEBot\Event\JoinEvent;
@@ -37,7 +45,6 @@
     use Symfony\Component\HttpFoundation\ParameterBag;
     use Symfony\Component\HttpFoundation\Request;
     use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-    use Symfony\Component\HttpFoundation\Response;
 
     class LineDriver extends HttpDriver {
 
@@ -90,15 +97,16 @@
 
         public function getMessages()
         {
+            $handle = null;
             if (empty($this->messages)) {
                 foreach ($this->event as $event) {
                     if ($event instanceof MessageEvent) {
                         if ($event instanceof TextMessage) {
                             $this->messages[] = new IncomingMessage($event->getText(), $event->getUserId(), $event->getReplyToken());
                         } elseif ($event instanceof StickerMessage) {
-
+                            $handle = new StickerMessageHandler($this->line, $event);
                         } elseif ($event instanceof LocationMessage) {
-
+                            $handle = new LocationMessageHandler($this->line, $event);
                         } elseif ($event instanceof ImageMessage) {
 
                         } elseif ($event instanceof AudioMessage) {
@@ -117,17 +125,17 @@
                                                     ));
                         }
                     } elseif ($event instanceof UnfollowEvent) {
-
+                        $handler = new UnfollowEventHandler($this->line, $event);
                     } elseif ($event instanceof FollowEvent) {
-
+                        $handler = new FollowEventHandler($this->line, $event);
                     } elseif ($event instanceof JoinEvent) {
-
+                        $handler = new JoinEventHandler($this->line, $event);
                     } elseif ($event instanceof LeaveEvent) {
-
+                        $handler = new LeaveEventHandler($this->line, $event);
                     } elseif ($event instanceof PostbackEvent) {
-
+                        $handler = new PostbackEventHandler($this->line, $event);
                     } elseif ($event instanceof BeaconDetectionEvent) {
-
+                        $handler = new BeaconEventHandler($this->line, $event);
                     } elseif ($event instanceof UnknownEvent) {
                         throw new LineException(sprintf('Unknown message type has come [type: %s]', $event->getType()));
                     } else {
@@ -138,6 +146,7 @@
                     }
                 }
             }
+            $handle->handle();
             return $this->messages;
         }
 
