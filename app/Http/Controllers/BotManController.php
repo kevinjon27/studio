@@ -14,15 +14,16 @@ class BotManController extends Controller
     /**
      * Place your BotMan logic here.
      */
-    public function handle()
+    public function handle(Request $request)
     {
+        Log::info('header', $request->headers->all());
+        Log::info('result'. $request->all());
+        
         DriverManager::loadDriver(LineDriver::class);
 
         $config = config('botman');
         // create an instance
         $botman = BotManFactory::create($config);
-
-        dd($botman);
 
         $botman->hears('Hi', function ($bot) {
             $bot->reply('Hello!');
