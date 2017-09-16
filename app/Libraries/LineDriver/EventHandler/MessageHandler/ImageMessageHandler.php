@@ -8,7 +8,6 @@ use App\Libraries\LineDriver\EventHandler;
 use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 
 use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
-use Symfony\Component\HttpFoundation\Request;
 
 class ImageMessageHandler implements EventHandler
 {
@@ -20,7 +19,7 @@ class ImageMessageHandler implements EventHandler
     /** @var ImageMessage $imageMessage */
     private $imageMessage;
 
-    public function __construct($bot, Request $request, ImageMessage $imageMessage)
+    public function __construct($bot, $request, ImageMessage $imageMessage)
     {
         $this->bot = $bot;
         $this->request = $request;

@@ -7,7 +7,6 @@ use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use App\Libraries\LineDriver\EventHandler;
 use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
-use Symfony\Component\HttpFoundation\Request;
 
 class AudioMessageHandler implements EventHandler
 {
@@ -21,7 +20,7 @@ class AudioMessageHandler implements EventHandler
     /** @var AudioMessage $audioMessage */
     private $audioMessage;
 
-    public function __construct($bot, Request $request, AudioMessage $audioMessage)
+    public function __construct($bot, $request, AudioMessage $audioMessage)
     {
         $this->bot = $bot;
         $this->logger = new Log();

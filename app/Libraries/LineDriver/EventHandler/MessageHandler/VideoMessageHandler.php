@@ -7,7 +7,6 @@ use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 use App\Libraries\LineDriver\EventHandler;
 use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 use LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
-use Symfony\Component\HttpFoundation\Request;
 
 class VideoMessageHandler implements EventHandler
 {
@@ -18,7 +17,7 @@ class VideoMessageHandler implements EventHandler
     /** @var VideoMessage $videoMessage */
     private $videoMessage;
 
-    public function __construct($bot, Request $request, VideoMessage $videoMessage)
+    public function __construct($bot, $request, VideoMessage $videoMessage)
     {
         $this->bot = $bot;
         $this->request = $request;

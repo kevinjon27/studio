@@ -73,14 +73,11 @@
             Location::class
         ];
 
-        protected $request;
-
         /**
          * @param Request $request
          */
         public function buildPayload(Request $request)
         {
-            $this->request = $request->request->all();
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->signature = $request->headers->get(HTTPHeader::LINE_SIGNATURE);
             $this->config = Collection::make($this->config->get('line'));
@@ -124,11 +121,11 @@
                         } elseif ($event instanceof LocationMessage) {
                             $handle = new LocationMessageHandler($this->line, $event);
                         } elseif ($event instanceof ImageMessage) {
-                            $handle = new ImageMessageHandler($this->line, $this->request, $event);
+                            $handle = new ImageMessageHandler($this->line, $this->payload, $event);
                         } elseif ($event instanceof AudioMessage) {
-                            $handle = new AudioMessageHandler($this->line, $this->request, $event);
+                            $handle = new AudioMessageHandler($this->line, $this->payload, $event);
                         } elseif ($event instanceof VideoMessage) {
-                            $hande = new VideoMessageHandler($this->line, $this->request, $event);
+                            $hande = new VideoMessageHandler($this->line, $this->payload, $event);
                         } elseif ($event instanceof UnknownMessage) {
                             throw new LineException(sprintf(
                                                         'Unknown message type has come [message type: %s]',
