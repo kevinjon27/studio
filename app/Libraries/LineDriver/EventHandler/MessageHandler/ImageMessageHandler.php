@@ -40,7 +40,7 @@ class ImageMessageHandler implements EventHandler
         $fh = fopen($filePath, 'x');
         fwrite($fh, $image);
         fclose($fh);
-        move_uploaded_file($filePath, public_path('images/line/'.$filename));
+        rename($filePath, public_path('images/line/'.$filename));
 
         $replyToken = $this->imageMessage->getReplyToken();
 
