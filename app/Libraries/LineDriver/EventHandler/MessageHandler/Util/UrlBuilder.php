@@ -8,9 +8,9 @@ class UrlBuilder
     {
         // NOTE: You should configure $baseUri according to your environment
         // Perhaps, it is prefer to use $_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'] or etc
-        $baseUri = null;
+        $baseUri = $_SERVER['HTTP_HOST'];
         foreach ($paths as $path) {
-            $baseUri = asset(urlencode($path));
+            $baseUri .= '/' . urlencode($path);
         }
         return $baseUri;
     }
