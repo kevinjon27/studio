@@ -78,7 +78,7 @@
          */
         public function buildPayload(Request $request)
         {
-            $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
+            $this->payload = json_decode($request->getContent());
             $this->signature = $request->headers->get(HTTPHeader::LINE_SIGNATURE);
             $this->config = Collection::make($this->config->get('line'));
             $this->line = new LINEBot(new CurlHTTPClient($this->config->get('channel_access_token')),[
