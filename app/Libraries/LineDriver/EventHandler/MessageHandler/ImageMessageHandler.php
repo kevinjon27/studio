@@ -2,12 +2,9 @@
 
 namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\ImageMessage;
 use App\Libraries\LineDriver\EventHandler;
-use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 
 use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 
@@ -45,11 +42,9 @@ class ImageMessageHandler implements EventHandler
         $replyToken = $this->imageMessage->getReplyToken();
 
         $url = asset('images/line/'.$filename);
-        Log::info('url:'.$url);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
         // This sample doesn't treat that.
-        $resp = $this->bot->replyMessage($replyToken, new ImageMessageBuilder($url, $url));
-        Log::info('resp:'.$resp);
+        $this->bot->replyMessage($replyToken, new ImageMessageBuilder($url, $url));
     }
 }

@@ -1,11 +1,9 @@
 <?php
 namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use App\Libraries\LineDriver\EventHandler;
-use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 
 class AudioMessageHandler implements EventHandler
@@ -13,16 +11,12 @@ class AudioMessageHandler implements EventHandler
     /** @var LINEBot $bot */
     private $bot;
 
-
-    private $logger;
-
     /** @var AudioMessage $audioMessage */
     private $audioMessage;
 
     public function __construct($bot, AudioMessage $audioMessage)
     {
         $this->bot = $bot;
-        $this->logger = new Log();
         $this->audioMessage = $audioMessage;
     }
 
@@ -49,7 +43,5 @@ class AudioMessageHandler implements EventHandler
             $replyToken,
             new AudioMessageBuilder($url, 100)
         );
-
-        $this->logger->info($resp->getRawBody());
     }
 }
