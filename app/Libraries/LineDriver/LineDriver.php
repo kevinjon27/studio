@@ -121,11 +121,11 @@
                         } elseif ($event instanceof LocationMessage) {
                             $handle = new LocationMessageHandler($this->line, $event);
                         } elseif ($event instanceof ImageMessage) {
-                            $handle = new ImageMessageHandler($this->line, $this->payload, $event);
+                            $handle = new ImageMessageHandler($this->line, $event);
                         } elseif ($event instanceof AudioMessage) {
-                            $handle = new AudioMessageHandler($this->line, $this->payload, $event);
+                            $handle = new AudioMessageHandler($this->line, $event);
                         } elseif ($event instanceof VideoMessage) {
-                            $hande = new VideoMessageHandler($this->line, $this->payload, $event);
+                            $hande = new VideoMessageHandler($this->line, $event);
                         } elseif ($event instanceof UnknownMessage) {
                             throw new LineException(sprintf(
                                                         'Unknown message type has come [message type: %s]',

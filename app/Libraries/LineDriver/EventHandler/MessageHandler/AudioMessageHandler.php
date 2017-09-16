@@ -13,18 +13,16 @@ class AudioMessageHandler implements EventHandler
     /** @var LINEBot $bot */
     private $bot;
 
-    private $request;
 
     private $logger;
 
     /** @var AudioMessage $audioMessage */
     private $audioMessage;
 
-    public function __construct($bot, $request, AudioMessage $audioMessage)
+    public function __construct($bot, AudioMessage $audioMessage)
     {
         $this->bot = $bot;
         $this->logger = new Log();
-        $this->request = $request;
         $this->audioMessage = $audioMessage;
     }
 
@@ -44,7 +42,7 @@ class AudioMessageHandler implements EventHandler
 
         $replyToken = $this->audioMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl($this->request, ['static', 'tmpdir', $filename]);
+        $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
 
         $resp = $this->bot->replyMessage(
             $replyToken,

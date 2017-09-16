@@ -20,10 +20,9 @@ class ImageMessageHandler implements EventHandler
     /** @var ImageMessage $imageMessage */
     private $imageMessage;
 
-    public function __construct($bot, $request, ImageMessage $imageMessage)
+    public function __construct($bot, ImageMessage $imageMessage)
     {
         $this->bot = $bot;
-        $this->request = $request;
         $this->imageMessage = $imageMessage;
     }
 
@@ -42,8 +41,6 @@ class ImageMessageHandler implements EventHandler
         fclose($fh);
 
         $replyToken = $this->imageMessage->getReplyToken();
-        Log::info('request: '. $this->request);
-        Log::info('image: '. $image);
 
         $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
 

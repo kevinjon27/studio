@@ -13,11 +13,10 @@ class VideoMessageHandler implements EventHandler
     /** @var LINEBot $bot */
     private $bot;
 
-    private $request;
     /** @var VideoMessage $videoMessage */
     private $videoMessage;
 
-    public function __construct($bot, $request, VideoMessage $videoMessage)
+    public function __construct($bot, VideoMessage $videoMessage)
     {
         $this->bot = $bot;
         $this->request = $request;
@@ -40,7 +39,7 @@ class VideoMessageHandler implements EventHandler
 
         $replyToken = $this->videoMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl($this->request, ['static', 'tmpdir', $filename]);
+        $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
 
         // NOTE: You should pass the url of thumbnail image to `previewImageUrl`.
         // This sample doesn't treat that so this sample cannot show the thumbnail.
