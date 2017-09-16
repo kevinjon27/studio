@@ -39,7 +39,7 @@ class ImageMessageHandler implements EventHandler
 //        file_put_contents($filePath, $content);
 
         $tempfile = tmpfile();
-        $resp = fwrite($tempfile, $image->getRawBody());
+        $resp = fwrite($tempfile, $image);
         Log::info('temp : '.$tempfile);
         Log::info('image : '.$resp);
 
