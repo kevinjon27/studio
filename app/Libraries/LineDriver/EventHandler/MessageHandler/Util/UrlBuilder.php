@@ -10,6 +10,7 @@ class UrlBuilder
         // Perhaps, it is prefer to use $_SERVER['HTTP_HOST'], $_SERVER['HTTP_X_FORWARDED_HOST'] or etc
         $baseUri = null;
         foreach ($paths as $path) {
+            $baseUri = null;
             $baseUri .= asset(urlencode($path));
         }
         return $baseUri;
