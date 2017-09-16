@@ -30,6 +30,7 @@ class ImageMessageHandler implements EventHandler
     {
         $contentId = $this->imageMessage->getMessageId();
         $image = $this->bot->getMessageContent($contentId)->getRawBody();
+        $headers = json_encode($this->bot->getMessageContent($contentId)->getHeaders());
 
         $tmpfilePath = tempnam(asset('line/images/'), 'image-');
         unlink($tmpfilePath);
@@ -40,8 +41,7 @@ class ImageMessageHandler implements EventHandler
 
         $tempfile = tmpfile();
         $resp = fwrite($tempfile, $image);
-        Log::info('temp : '.$tempfile);
-        Log::info('image : '.$resp);
+        Log::info('headers : '.$resp);
 
         $replyToken = $this->imageMessage->getReplyToken();
 
