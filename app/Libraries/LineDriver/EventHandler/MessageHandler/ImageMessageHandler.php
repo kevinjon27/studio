@@ -34,7 +34,7 @@ class ImageMessageHandler implements EventHandler
         $filePath = rand(5,8) . '.jpg';
         $filename = basename($filePath);
 
-        $fh = fopen(asset('images/'.$filePath), 'x');
+        $fh = fopen(url('images/'.$filePath), 'x');
         fwrite($fh, $image);
         fclose($fh);
 
