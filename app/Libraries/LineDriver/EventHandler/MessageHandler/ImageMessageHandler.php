@@ -41,7 +41,7 @@ class ImageMessageHandler implements EventHandler
 
         $tempfile = tmpfile();
         $resp = fwrite($tempfile, $image);
-        Log::info('headers : '.$resp);
+        Log::info('headers : '.$headers);
 
         $replyToken = $this->imageMessage->getReplyToken();
 
