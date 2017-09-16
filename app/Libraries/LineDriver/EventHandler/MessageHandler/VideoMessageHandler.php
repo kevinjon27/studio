@@ -5,7 +5,6 @@ namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 use App\Libraries\LineDriver\EventHandler;
-use App\Libraries\LineDriver\EventHandler\MessageHandler\Util\UrlBuilder;
 use LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
 
 class VideoMessageHandler implements EventHandler
