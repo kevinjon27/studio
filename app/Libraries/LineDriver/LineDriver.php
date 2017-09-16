@@ -9,12 +9,18 @@
     use App\Libraries\LineDriver\EventHandler\FollowEventHandler;
     use App\Libraries\LineDriver\EventHandler\JoinEventHandler;
     use App\Libraries\LineDriver\EventHandler\LeaveEventHandler;
+    use App\Libraries\LineDriver\EventHandler\MessageHandler\AudioMessageHandler;
     use App\Libraries\LineDriver\EventHandler\MessageHandler\ImageMessageHandler;
     use App\Libraries\LineDriver\EventHandler\MessageHandler\LocationMessageHandler;
     use App\Libraries\LineDriver\EventHandler\MessageHandler\StickerMessageHandler;
+    use App\Libraries\LineDriver\EventHandler\MessageHandler\VideoMessageHandler;
     use App\Libraries\LineDriver\EventHandler\PostbackEventHandler;
     use App\Libraries\LineDriver\EventHandler\UnfollowEventHandler;
     use App\Libraries\LineDriver\Exceptions\LineException;
+    use BotMan\BotMan\Messages\Attachments\Audio;
+    use BotMan\BotMan\Messages\Attachments\Image;
+    use BotMan\BotMan\Messages\Attachments\Location;
+    use BotMan\BotMan\Messages\Attachments\Video;
     use BotMan\BotMan\Messages\Incoming\Answer;
     use BotMan\BotMan\Users\User;
     use LINE\LINEBot\Event\BeaconDetectionEvent;
@@ -60,11 +66,21 @@
 
         protected $matchesRequest = false;
 
+        private $supportedAttachments = [
+            Video::class,
+            Audio::class,
+            Image::class,
+            Location::class
+        ];
+
+        protected $request;
+
         /**
          * @param Request $request
          */
         public function buildPayload(Request $request)
         {
+            $this->request = $request->request->all();
             $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
             $this->signature = $request->headers->get(HTTPHeader::LINE_SIGNATURE);
             $this->config = Collection::make($this->config->get('line'));
@@ -108,11 +124,11 @@
                         } elseif ($event instanceof LocationMessage) {
                             $handle = new LocationMessageHandler($this->line, $event);
                         } elseif ($event instanceof ImageMessage) {
-
+                            $handle = new ImageMessageHandler($this->line, $this->request, $event);
                         } elseif ($event instanceof AudioMessage) {
-
+                            $handle = new AudioMessageHandler($this->line, $this->request, $event);
                         } elseif ($event instanceof VideoMessage) {
-
+                            $hande = new VideoMessageHandler($this->line, $this->request, $event);
                         } elseif ($event instanceof UnknownMessage) {
                             throw new LineException(sprintf(
                                                         'Unknown message type has come [message type: %s]',
