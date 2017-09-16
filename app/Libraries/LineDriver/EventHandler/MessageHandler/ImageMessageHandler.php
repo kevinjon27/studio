@@ -2,6 +2,7 @@
 
 namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 
+use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\ImageMessage;
 use App\Libraries\LineDriver\EventHandler;
