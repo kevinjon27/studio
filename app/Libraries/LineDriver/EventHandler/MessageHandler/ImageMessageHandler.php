@@ -30,22 +30,19 @@ class ImageMessageHandler implements EventHandler
     {
         $contentId = $this->imageMessage->getMessageId();
         $image = $this->bot->getMessageContent($contentId)->getRawBody();
-
-        $tmpfilePath = tempnam(asset('line/images/'), 'image-');
-        unlink($tmpfilePath);
-        $filePath = $tmpfilePath . '.jpg';
-        $filename = basename($filePath);
-        $content = file_get_contents($image);
-        file_put_contents($filePath, $content);
+        $tempfile = tmpfile();
+        $resp = fwrite($tempfile, $image);
+        Log::info('temp: '.$tempfile);
+        Log::info('resp: '.$resp);
 
 
         $replyToken = $this->imageMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl(['public', 'tmpdir', $filename]);
-        Log::info('URL: '.$url);
+//        $url = UrlBuilder::buildUrl(['public', 'tmpdir', $filename]);
+//        Log::info('URL: '.$url);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
         // This sample doesn't treat that.
-        $this->bot->replyMessage($replyToken, new ImageMessageBuilder($url, $url));
+//        $this->bot->replyMessage($replyToken, new ImageMessageBuilder($url, $url));
     }
 }
