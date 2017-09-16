@@ -44,13 +44,10 @@ class ImageMessageHandler implements EventHandler
 
         $replyToken = $this->imageMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl([$filename]);
-        Log::info('Url: '.$url);
-
+        $url = asset('images/line'.$filename);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
         // This sample doesn't treat that.
         $resp = $this->bot->replyMessage($replyToken, new ImageMessageBuilder($url, $url));
-        Log::info('Resp: '.$resp);
     }
 }

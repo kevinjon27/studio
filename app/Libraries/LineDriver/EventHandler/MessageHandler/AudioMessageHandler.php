@@ -39,10 +39,11 @@ class AudioMessageHandler implements EventHandler
         $fh = fopen($filePath, 'x');
         fwrite($fh, $audio);
         fclose($fh);
+        rename($filePath, public_path('mp4/line/'.$filename));
 
         $replyToken = $this->audioMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
+        $url = asset('mp4/line'.$filename);
 
         $resp = $this->bot->replyMessage(
             $replyToken,

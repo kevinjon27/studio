@@ -19,7 +19,6 @@ class VideoMessageHandler implements EventHandler
     public function __construct($bot, VideoMessage $videoMessage)
     {
         $this->bot = $bot;
-        $this->request = $request;
         $this->videoMessage = $videoMessage;
     }
 
@@ -36,10 +35,11 @@ class VideoMessageHandler implements EventHandler
         $fh = fopen($filePath, 'x');
         fwrite($fh, $video);
         fclose($fh);
+        rename($filePath, public_path('mp4/line/'.$filename));
 
         $replyToken = $this->videoMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
+        $url = asset('mp4/line'.$filename);
 
         // NOTE: You should pass the url of thumbnail image to `previewImageUrl`.
         // This sample doesn't treat that so this sample cannot show the thumbnail.
