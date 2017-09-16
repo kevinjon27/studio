@@ -11,7 +11,7 @@ class UrlBuilder
         $baseUri = null;
         foreach ($paths as $path) {
             $baseUri = null;
-            $baseUri .= asset(urlencode($path));
+            $baseUri .= asset('line/images/'.urlencode($path));
         }
         return $baseUri;
     }

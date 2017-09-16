@@ -35,6 +35,8 @@ class ImageMessageHandler implements EventHandler
         unlink($tmpfilePath);
         $filePath = $tmpfilePath . '.jpg';
         $filename = basename($filePath);
+        Log::info('Filepath: '.$filePath);
+        Log::info('Filename: '.$filename);
 
         $fh = fopen($filePath, 'x');
         fwrite($fh, $image);
