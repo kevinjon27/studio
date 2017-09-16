@@ -31,16 +31,12 @@ class ImageMessageHandler implements EventHandler
         $contentId = $this->imageMessage->getMessageId();
         $image = $this->bot->getMessageContent($contentId)->getRawBody();
 
-        $tmpfilePath = tempnam($_SERVER['DOCUMENT_ROOT'] . '/public/tmpdir', 'image-');
+        $tmpfilePath = tempnam(asset('line/images/'), 'image-');
         unlink($tmpfilePath);
         $filePath = $tmpfilePath . '.jpg';
         $filename = basename($filePath);
-        Log::info('Filepath: '.$filePath);
-        Log::info('Filename: '.$filename);
-
-        $fh = fopen($filePath, 'x');
-        fwrite($fh, $image);
-        fclose($fh);
+        $content = file_get_contents($image);
+        file_put_contents($filePath, $content);
 
 
         $replyToken = $this->imageMessage->getReplyToken();
