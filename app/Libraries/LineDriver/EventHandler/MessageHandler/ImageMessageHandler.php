@@ -37,15 +37,14 @@ class ImageMessageHandler implements EventHandler
         $filename = basename($filePath);
 
         $fh = fopen($filePath, 'x');
-        Log::info('URL: '.$filePath);
         fwrite($fh, $image);
         fclose($fh);
-        Log::info('Fopen: '.$fh);
+        move_uploaded_file($filePath, asset('images'));
 
 
         $replyToken = $this->imageMessage->getReplyToken();
 
-        $url = UrlBuilder::buildUrl(['public', 'tmpdir', $filename]);
+        $url = UrlBuilder::buildUrl([$filename]);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
         // This sample doesn't treat that.
