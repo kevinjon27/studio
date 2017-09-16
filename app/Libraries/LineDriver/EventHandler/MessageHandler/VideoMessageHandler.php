@@ -35,11 +35,11 @@ class VideoMessageHandler implements EventHandler
         $fh = fopen($filePath, 'x');
         fwrite($fh, $video);
         fclose($fh);
-        rename($filePath, public_path('mp4/line/'.$filename));
+        rename($filePath, public_path('video/line/'.$filename));
 
         $replyToken = $this->videoMessage->getReplyToken();
 
-        $url = asset('mp4/line'.$filename);
+        $url = asset('video/line/'.$filename);
 
         // NOTE: You should pass the url of thumbnail image to `previewImageUrl`.
         // This sample doesn't treat that so this sample cannot show the thumbnail.

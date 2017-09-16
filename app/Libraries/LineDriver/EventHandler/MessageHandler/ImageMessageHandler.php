@@ -44,7 +44,7 @@ class ImageMessageHandler implements EventHandler
 
         $replyToken = $this->imageMessage->getReplyToken();
 
-        $url = asset('images/line'.$filename);
+        $url = asset('images/line/'.$filename);
         Log::info('url:'.$url);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
