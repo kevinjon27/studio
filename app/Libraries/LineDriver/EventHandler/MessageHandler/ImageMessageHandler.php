@@ -41,6 +41,8 @@ class ImageMessageHandler implements EventHandler
         fclose($fh);
 
         $replyToken = $this->imageMessage->getReplyToken();
+        Log::info('request: '. $this->request);
+        Log::info('image: '. $image);
 
         $url = UrlBuilder::buildUrl($this->request, ['static', 'tmpdir', $filename]);
 
