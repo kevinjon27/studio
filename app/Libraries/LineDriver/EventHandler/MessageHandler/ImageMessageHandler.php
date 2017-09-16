@@ -2,6 +2,7 @@
 
 namespace App\Libraries\LineDriver\EventHandler\MessageHandler;
 
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\ImageMessage;
@@ -39,8 +40,7 @@ class ImageMessageHandler implements EventHandler
         $fh = fopen($filePath, 'x');
         fwrite($fh, $image);
         fclose($fh);
-        move_uploaded_file($filePath, asset('images'));
-
+        move_uploaded_file($filePath, public_path('images/line/'.$filename));
 
         $replyToken = $this->imageMessage->getReplyToken();
 
