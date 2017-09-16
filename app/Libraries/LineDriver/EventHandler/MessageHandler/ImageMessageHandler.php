@@ -35,8 +35,8 @@ class ImageMessageHandler implements EventHandler
         unlink($tmpfilePath);
         $filePath = $tmpfilePath . '.jpg';
         $filename = basename($filePath);
-        $content = file_get_contents($image);
-        file_put_contents($filePath, $content);
+//        $content = file_get_contents($image);
+//        file_put_contents($filePath, $content);
 
         $tempfile = tmpfile();
         $resp = fwrite($tempfile, $image->getRawBody());
