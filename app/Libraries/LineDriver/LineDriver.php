@@ -125,7 +125,7 @@
                         } elseif ($event instanceof AudioMessage) {
                             $handle = new AudioMessageHandler($this->line, $event);
                         } elseif ($event instanceof VideoMessage) {
-                            $hande = new VideoMessageHandler($this->line, $event);
+                            $handle = new VideoMessageHandler($this->line, $event);
                         } elseif ($event instanceof UnknownMessage) {
                             throw new LineException(sprintf(
                                                         'Unknown message type has come [message type: %s]',
