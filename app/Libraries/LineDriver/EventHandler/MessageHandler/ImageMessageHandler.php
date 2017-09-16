@@ -40,9 +40,12 @@ class ImageMessageHandler implements EventHandler
         fwrite($fh, $image);
         fclose($fh);
 
+
         $replyToken = $this->imageMessage->getReplyToken();
 
         $url = UrlBuilder::buildUrl(['static', 'tmpdir', $filename]);
+        Log::info('Image: '.$image);
+        Log::info('URL: '.url);
 
         // NOTE: You should pass the url of small image to `previewImageUrl`.
         // This sample doesn't treat that.
